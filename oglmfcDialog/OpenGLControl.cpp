@@ -129,11 +129,11 @@ void COpenGLControl::OnDraw(CDC *pDC)
 
 	//camera control
 	//cam_controls cam;
-	cam.zoom = m_fZoom;
-	cam.translateX = m_fPosX;
-	cam.translateY = m_fPosY;
-	cam.rotateX = m_fRotX;
-	cam.rotateY = m_fRotY;
+	cam.m_fZoom = m_fZoom;
+	cam.m_fPosX = m_fPosX;
+	cam.m_fPosY = m_fPosY;
+	cam.m_fRotX = m_fRotX;
+	cam.m_fRotY = m_fRotY;
 	cam.CameraView();
 	//camera.RotateCamera(45.0f);
 	//

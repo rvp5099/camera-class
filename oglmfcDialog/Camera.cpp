@@ -66,10 +66,10 @@ void CCamera::ZoomCamera(float zoom)
 void CCamera::CameraView()
 {
 	glLoadIdentity();
-	glTranslatef(0.0f, 0.0f, -zoom);
-	glTranslatef(translateX, translateY, 0.0f);
-	glRotatef(rotateX, 1.0f, 0.0f, 0.0f);
-	glRotatef(rotateY, 0.0f, 1.0f, 0.0f);
+	glTranslatef(0.0f, 0.0f, -m_fZoom);
+	glTranslatef(m_fPosX, m_fPosY, 0.0f);
+	glRotatef(m_fRotX, 1.0f, 0.0f, 0.0f);
+	glRotatef(m_fRotY, 0.0f, 1.0f, 0.0f);
 }
 
 
@@ -96,8 +96,8 @@ void CCamera::MouseMoveCamera(CPoint point)
 	TRACE("mouse.m_fPosY: %f \n", m_fPosY);
 	TRACE("mouse.diffX: %i \n", diffX);
 	TRACE("mouse.diffY: %i \n", diffY);
-	m_fPosX = m_fPosX + (float)0.05f * diffX;
-	m_fPosY = m_fPosY - (float)0.05f * diffY;
+	m_fPosX -= m_fPosX + (float)0.05f * diffX;
+	m_fPosY += m_fPosY - (float)0.05f * diffY;
 	TRACE("mouse.m_fPosX: %f \n", m_fPosX);
 	TRACE("mouse.m_fPosY: %f \n", m_fPosY);
 

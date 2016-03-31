@@ -67,11 +67,11 @@ public:
 	float	m_fRotX;		// X Rotation in camera View
 	float	m_fRotY;		// Y Rotation in camera View
 
-	float zoom;
-	float translateX;
-	float translateY;
-	float rotateX;
-	float rotateY;
+	//float zoom;
+	//float translateX;
+	//float translateY;
+	//float rotateX;
+	//float rotateY;
 
 	//void MouseMove(UINT nFlags, CPoint point, float zoom, float translateX, float translateY, float LastX, float LastY,  int diffX, int diffY, WPARAM wParam);
 
