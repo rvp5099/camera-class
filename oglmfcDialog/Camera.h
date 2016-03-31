@@ -104,6 +104,8 @@ public:
 	//UINT blades;
 	//float bladesrotation;
 protected:
+	
+	CPoint		m_RightDownPos;
 
 	float	m_fPosX;		// X position of the model in camera View
 	float	m_fPosY;		// Y position of the model in camera View

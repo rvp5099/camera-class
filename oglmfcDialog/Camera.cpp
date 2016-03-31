@@ -27,6 +27,12 @@ CCamera::CCamera()
 	m_fZoom  = 0.0f;
 	m_fRotX  = 0.0f;
 	m_fRotY  = 0.0f;
+	diffX    = 0;
+	diffY    = 0;
+	m_fLastX = 0.0f;
+	m_fLastY = 0.0f;
+	m_RightDownPos.x = 0;
+	m_RightDownPos.y = 0;
 }
 
 CCamera::~CCamera()
@@ -76,7 +82,7 @@ void CCamera::CameraView()
 
 void CCamera::MouseZoomCamera(CPoint point)
 {
-	NewPoint(point);
+	//NewPoint(point);
 	//diffX = (int)(point.x - m_fLastX);
 	//diffY = (int)(point.y - m_fLastY);
 	//m_fLastX  = (float)point.x; 
@@ -88,25 +94,30 @@ void CCamera::MouseZoomCamera(CPoint point)
 
 void CCamera::MouseMoveCamera(CPoint point)
 {
-	NewPoint(point);
 	TRACE("point.x: %li \n", point.x);
 	TRACE("point.y: %li \n", point.y);
 	TRACE("mouse.m_fPosX: %f \n", m_fPosX);
 	TRACE("mouse.m_fPosY: %f \n", m_fPosY);
-	TRACE("mouse.diffX: %i \n", diffX);
-	TRACE("mouse.diffY: %i \n", diffY);
-	m_fPosX += diffX * 0.01f;
-	m_fPosY -= diffY * 0.01f;
+	TRACE("Last X: %f \n", m_RightDownPos.x);
+	TRACE("Last Y: %f \n", m_RightDownPos.x);
+	//NewPoint(point);
+	//TRACE("point.x: %li \n", point.x);
+	//TRACE("point.y: %li \n", point.y);
+	//m_fPosX += diffX * 0.01f;
+	//m_fPosY -= diffY * 0.01f;
+	
+	m_fPosX -= (float)(m_RightDownPos.x - point.x) * 0.005f;
+	m_fPosY += (float)(m_RightDownPos.y - point.y) * 0.005f;
 	TRACE("mouse.m_fPosX: %f \n", m_fPosX);
 	TRACE("mouse.m_fPosY: %f \n", m_fPosY);
-
-//	m_fPosX += (float)0.05f * diffX;
-//	m_fPosY -= (float)0.05f * diffY;
+	m_RightDownPos = point;
 }
 
 
 void CCamera::NewPoint(CPoint point)
 {
+	diffX = 0;
+	diffY = 0;
 	diffX = (int)(point.x - m_fLastX);
 	diffY = (int)(point.y - m_fLastY);
 	m_fLastX  = (float)point.x;

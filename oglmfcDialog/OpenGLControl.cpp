@@ -109,8 +109,8 @@ void COpenGLControl::OnPaint()
 void COpenGLControl::OnDraw(CDC *pDC)
 {
 	//CCamera camera;
-	//glLoadIdentity();
-	cam.IdentityMatrix();
+	glLoadIdentity();
+	//cam.IdentityMatrix();
 
 	float ambient[]  = {0.2f, 0.2f, 0.2f, 1.0f};
 	float diffuse[]  = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -126,6 +126,8 @@ void COpenGLControl::OnDraw(CDC *pDC)
 
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
+	
+	glLoadIdentity();
 
 	//camera control
 	//cam_controls cam;
