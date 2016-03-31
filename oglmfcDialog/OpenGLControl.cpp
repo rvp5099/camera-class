@@ -109,8 +109,8 @@ void COpenGLControl::OnPaint()
 void COpenGLControl::OnDraw(CDC *pDC)
 {
 	//CCamera camera;
-	//glLoadIdentity();
-	cam.IdentityMatrix();
+	glLoadIdentity();
+	//cam.IdentityMatrix();
 
 	float ambient[]  = {0.2f, 0.2f, 0.2f, 1.0f};
 	float diffuse[]  = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -126,14 +126,16 @@ void COpenGLControl::OnDraw(CDC *pDC)
 
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
+	
+	glLoadIdentity();
 
 	//camera control
 	//cam_controls cam;
-	cam.zoom = m_fZoom;
-	cam.translateX = m_fPosX;
-	cam.translateY = m_fPosY;
-	cam.rotateX = m_fRotX;
-	cam.rotateY = m_fRotY;
+	//cam.m_fZoom = m_fZoom;
+	//cam.m_fPosX = m_fPosX;
+	//cam.m_fPosY = m_fPosY;
+	cam.m_fRotX = m_fRotX;
+	cam.m_fRotY = m_fRotY;
 	cam.CameraView();
 	//camera.RotateCamera(45.0f);
 	//
@@ -313,9 +315,14 @@ void COpenGLControl::OnMouseMove(UINT nFlags, CPoint point)
 	if (nFlags & MK_LBUTTON)
 	{
 		//camera.mouse;
+
+		// CLK III -- because all of this should be contained you should only need to send point to the camera
+		// move routine, this ensures that the only place you are manipulating the camera data is inside the class
+		// and then you can't ruin your data by allowing the program to interfere
+
 		cam.MouseMoveCamera(point);
-		m_fPosX = cam.m_fPosX;
-		m_fPosY = cam.m_fPosY;
+		//m_fPosX = cam.m_fPosX;
+		//m_fPosY = cam.m_fPosY;
 
 
 		//m_fPosX = camera.m_fPosX;
@@ -359,17 +366,17 @@ void COpenGLControl::OnMouseMove(UINT nFlags, CPoint point)
 	else if ( nFlags & MK_RBUTTON)
 	{
 		//camera.MouseMoveCamera(point);
-		m_fPosX += (float)0.05f * diffX;
-		m_fPosY -= (float)0.05f * diffY;
-		TRACE("\nX position: %f \n", m_fPosX);
-		TRACE("Y position: %f \n", m_fPosY);
+		//m_fPosX += (float)0.05f * diffX;
+		//m_fPosY -= (float)0.05f * diffY;
+		//TRACE("\nX position: %f \n", m_fPosX);
+		//TRACE("Y position: %f \n", m_fPosY);
 	}
 	else if (nFlags & MK_CONTROL)
 	{
 	//	TRACE("x point: %f\n", point.x);
 	//	TRACE("y point: %f\n", point.y);
 		cam.MouseZoomCamera(point);
-		m_fZoom -= (float) 0.1f * diffY;
+		//m_fZoom -= (float) 0.1f * diffY;
 		//m_fZoom = camera.mouse.m_fZoom;
 	//	TRACE("Y diff CAMERA: %d \n", diffY);
 	//	TRACE("Y diff CAMERA: %d \n", camera.diffY);
@@ -390,6 +397,12 @@ void COpenGLControl::OnMouseMove(UINT nFlags, CPoint point)
 	}
 	*/
 
+	// CLK III -- this is what the camera wants.
+
+	// you have to set this all the time that the mouse is moving
+	// so that when you start the camera move there isn't that sudden lurch
+
+	cam.m_RightDownPos = point;
 	OnDraw(NULL);
 
 	CWnd::OnMouseMove(nFlags, point);

@@ -27,6 +27,12 @@ CCamera::CCamera()
 	m_fZoom  = 0.0f;
 	m_fRotX  = 0.0f;
 	m_fRotY  = 0.0f;
+	diffX    = 0;
+	diffY    = 0;
+	m_fLastX = 0.0f;
+	m_fLastY = 0.0f;
+	m_RightDownPos.x = 0;
+	m_RightDownPos.y = 0;
 }
 
 CCamera::~CCamera()
@@ -66,48 +72,69 @@ void CCamera::ZoomCamera(float zoom)
 void CCamera::CameraView()
 {
 	glLoadIdentity();
-	glTranslatef(0.0f, 0.0f, -zoom);
-	glTranslatef(translateX, translateY, 0.0f);
-	glRotatef(rotateX, 1.0f, 0.0f, 0.0f);
-	glRotatef(rotateY, 0.0f, 1.0f, 0.0f);
+	glTranslatef(0.0f, 0.0f, -m_fZoom);
+	glTranslatef(m_fPosX, m_fPosY, 0.0f);
+	glRotatef(m_fRotX, 1.0f, 0.0f, 0.0f);
+	glRotatef(m_fRotY, 0.0f, 1.0f, 0.0f);
 }
 
 
 
 void CCamera::MouseZoomCamera(CPoint point)
 {
-	NewPoint(point);
+	//NewPoint(point);
 	//diffX = (int)(point.x - m_fLastX);
 	//diffY = (int)(point.y - m_fLastY);
 	//m_fLastX  = (float)point.x; 
 	//m_fLastY  = (float)point.y;
-
-	m_fZoom = m_fZoom - (float) 0.1f * diffY;
+	m_fZoom += 0.1f;
 	
 	TRACE("Zoom MOUSE: %f \n", m_fZoom);
 }
 
 void CCamera::MouseMoveCamera(CPoint point)
 {
-	NewPoint(point);
+	// CLK III This is a very interesting problem
+
+	// it looks like the last position move to move is not getting saved, or on the start of a new move
+	// it tries to figure out the diff in the mouse positions. this creates a little number difference for the 
+	// first move. which only gets worse as you move more and more. I wonder why this doesn't happen when you are
+	// moving the camera in our software. we do the same thing as this. almost exactly. 
+
+
+	// I'm still not entirely sure why this is happening. it would be ideal if we could get this to work in some other
+	// way that is not based off the little jump from the start. I think the same 
+	// thing was happening with the notes and I made it so that you couldn't move them
+	// if you werent close enough to the note. perhaps you could make it such that the 
+	// x, y positions are recorded regardless of what is happening.
+
+	// this way when you start actually moving the mouse the default last position
+	// is actually something that exists in the screen space.
+
 	TRACE("point.x: %li \n", point.x);
 	TRACE("point.y: %li \n", point.y);
 	TRACE("mouse.m_fPosX: %f \n", m_fPosX);
 	TRACE("mouse.m_fPosY: %f \n", m_fPosY);
-	TRACE("mouse.diffX: %i \n", diffX);
-	TRACE("mouse.diffY: %i \n", diffY);
-	m_fPosX = m_fPosX + (float)0.05f * diffX;
-	m_fPosY = m_fPosY - (float)0.05f * diffY;
+	TRACE("Last X: %f \n", m_RightDownPos.x);
+	TRACE("Last Y: %f \n", m_RightDownPos.x);
+	//NewPoint(point);
+	//TRACE("point.x: %li \n", point.x);
+	//TRACE("point.y: %li \n", point.y);
+	//m_fPosX += diffX * 0.01f;
+	//m_fPosY -= diffY * 0.01f;
+	
+	m_fPosX -= (float)(m_RightDownPos.x - point.x) * 0.005f;
+	m_fPosY += (float)(m_RightDownPos.y - point.y) * 0.005f;
 	TRACE("mouse.m_fPosX: %f \n", m_fPosX);
 	TRACE("mouse.m_fPosY: %f \n", m_fPosY);
-
-//	m_fPosX += (float)0.05f * diffX;
-//	m_fPosY -= (float)0.05f * diffY;
+	m_RightDownPos = point;
 }
 
 
 void CCamera::NewPoint(CPoint point)
 {
+	diffX = 0;
+	diffY = 0;
 	diffX = (int)(point.x - m_fLastX);
 	diffY = (int)(point.y - m_fLastY);
 	m_fLastX  = (float)point.x;
