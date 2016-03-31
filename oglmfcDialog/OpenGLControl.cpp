@@ -129,9 +129,9 @@ void COpenGLControl::OnDraw(CDC *pDC)
 
 	//camera control
 	//cam_controls cam;
-	cam.m_fZoom = m_fZoom;
-	cam.m_fPosX = m_fPosX;
-	cam.m_fPosY = m_fPosY;
+	//cam.m_fZoom = m_fZoom;
+	//cam.m_fPosX = m_fPosX;
+	//cam.m_fPosY = m_fPosY;
 	cam.m_fRotX = m_fRotX;
 	cam.m_fRotY = m_fRotY;
 	cam.CameraView();
@@ -313,9 +313,14 @@ void COpenGLControl::OnMouseMove(UINT nFlags, CPoint point)
 	if (nFlags & MK_LBUTTON)
 	{
 		//camera.mouse;
+
+		// CLK III -- because all of this should be contained you should only need to send point to the camera
+		// move routine, this ensures that the only place you are manipulating the camera data is inside the class
+		// and then you can't ruin your data by allowing the program to interfere
+
 		cam.MouseMoveCamera(point);
-		m_fPosX = cam.m_fPosX;
-		m_fPosY = cam.m_fPosY;
+		//m_fPosX = cam.m_fPosX;
+		//m_fPosY = cam.m_fPosY;
 
 
 		//m_fPosX = camera.m_fPosX;
@@ -359,17 +364,17 @@ void COpenGLControl::OnMouseMove(UINT nFlags, CPoint point)
 	else if ( nFlags & MK_RBUTTON)
 	{
 		//camera.MouseMoveCamera(point);
-		m_fPosX += (float)0.05f * diffX;
-		m_fPosY -= (float)0.05f * diffY;
-		TRACE("\nX position: %f \n", m_fPosX);
-		TRACE("Y position: %f \n", m_fPosY);
+		//m_fPosX += (float)0.05f * diffX;
+		//m_fPosY -= (float)0.05f * diffY;
+		//TRACE("\nX position: %f \n", m_fPosX);
+		//TRACE("Y position: %f \n", m_fPosY);
 	}
 	else if (nFlags & MK_CONTROL)
 	{
 	//	TRACE("x point: %f\n", point.x);
 	//	TRACE("y point: %f\n", point.y);
 		cam.MouseZoomCamera(point);
-		m_fZoom -= (float) 0.1f * diffY;
+		//m_fZoom -= (float) 0.1f * diffY;
 		//m_fZoom = camera.mouse.m_fZoom;
 	//	TRACE("Y diff CAMERA: %d \n", diffY);
 	//	TRACE("Y diff CAMERA: %d \n", camera.diffY);

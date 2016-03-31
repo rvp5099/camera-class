@@ -81,8 +81,7 @@ void CCamera::MouseZoomCamera(CPoint point)
 	//diffY = (int)(point.y - m_fLastY);
 	//m_fLastX  = (float)point.x; 
 	//m_fLastY  = (float)point.y;
-
-	m_fZoom = m_fZoom - (float) 0.1f * diffY;
+	m_fZoom += 0.1f;
 	
 	TRACE("Zoom MOUSE: %f \n", m_fZoom);
 }
@@ -96,8 +95,8 @@ void CCamera::MouseMoveCamera(CPoint point)
 	TRACE("mouse.m_fPosY: %f \n", m_fPosY);
 	TRACE("mouse.diffX: %i \n", diffX);
 	TRACE("mouse.diffY: %i \n", diffY);
-	m_fPosX -= m_fPosX + (float)0.05f * diffX;
-	m_fPosY += m_fPosY - (float)0.05f * diffY;
+	m_fPosX += diffX * 0.01f;
+	m_fPosY -= diffY * 0.01f;
 	TRACE("mouse.m_fPosX: %f \n", m_fPosX);
 	TRACE("mouse.m_fPosY: %f \n", m_fPosY);
 
