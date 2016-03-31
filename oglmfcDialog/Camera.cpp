@@ -94,6 +94,23 @@ void CCamera::MouseZoomCamera(CPoint point)
 
 void CCamera::MouseMoveCamera(CPoint point)
 {
+	// CLK III This is a very interesting problem
+
+	// it looks like the last position move to move is not getting saved, or on the start of a new move
+	// it tries to figure out the diff in the mouse positions. this creates a little number difference for the 
+	// first move. which only gets worse as you move more and more. I wonder why this doesn't happen when you are
+	// moving the camera in our software. we do the same thing as this. almost exactly. 
+
+
+	// I'm still not entirely sure why this is happening. it would be ideal if we could get this to work in some other
+	// way that is not based off the little jump from the start. I think the same 
+	// thing was happening with the notes and I made it so that you couldn't move them
+	// if you werent close enough to the note. perhaps you could make it such that the 
+	// x, y positions are recorded regardless of what is happening.
+
+	// this way when you start actually moving the mouse the default last position
+	// is actually something that exists in the screen space.
+
 	TRACE("point.x: %li \n", point.x);
 	TRACE("point.y: %li \n", point.y);
 	TRACE("mouse.m_fPosX: %f \n", m_fPosX);

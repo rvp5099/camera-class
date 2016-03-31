@@ -397,6 +397,12 @@ void COpenGLControl::OnMouseMove(UINT nFlags, CPoint point)
 	}
 	*/
 
+	// CLK III -- this is what the camera wants.
+
+	// you have to set this all the time that the mouse is moving
+	// so that when you start the camera move there isn't that sudden lurch
+
+	cam.m_RightDownPos = point;
 	OnDraw(NULL);
 
 	CWnd::OnMouseMove(nFlags, point);
