@@ -299,7 +299,7 @@ void COpenGLControl::OnMouseMove(UINT nFlags, CPoint point)
 
 //	TRACE("\nX OGLControl: %li\n", point.x);
 //	TRACE("Y OGLControl: %li\n", point.y);
-	//camera.NewPoint(point);
+	//cama.NewPoint(point);
 	int diffX = (int)(point.x - m_fLastX);
 	int diffY = (int)(point.y - m_fLastY);
 //	TRACE("X diff OGLControl: %i \n", diffX);
@@ -312,14 +312,14 @@ void COpenGLControl::OnMouseMove(UINT nFlags, CPoint point)
 	// Left Mouse Button
 	if (nFlags & MK_LBUTTON)
 	{
-		//camera.mouse;
+		//cam.mouse;
 		cam.MouseMoveCamera(point);
 		m_fPosX = cam.m_fPosX;
 		m_fPosY = cam.m_fPosY;
 
 
-		//m_fPosX = camera.m_fPosX;
-		//m_fPosY = camera.m_fPosY;
+		//m_fPosX = cam.m_fPosX;
+		//m_fPosY = cam.m_fPosY;
 		
 //		TRACE("X position OGLControl before: %f \n", m_fPosX);
 //		TRACE("Y position OGLControl before: %f \n", m_fPosY);
@@ -328,14 +328,14 @@ void COpenGLControl::OnMouseMove(UINT nFlags, CPoint point)
 //		TRACE("X position OGLControl after: %f \n", m_fPosX);
 //		TRACE("Y position OGLControl after: %f \n", m_fPosY);
 		
-		//TRACE("X position camera.m_fPosX: %f \n", camera.m_fPosX);
-		//TRACE("Y position camera.m_fPosY: %f \n", camera.m_fPosY);
+		//TRACE("X position camera.m_fPosX: %f \n", cam.m_fPosX);
+		//TRACE("Y position camera.m_fPosY: %f \n", cam.m_fPosY);
 		
 	}
 	// Middle Mouse Button
 	else if ( nFlags & MK_MBUTTON)
 	{
-		//camera.MouseRotateCamera(point);
+		//cam.MouseRotateCamera(point);
 		
 		m_fRotX += (float) 0.5f * diffY;
 
@@ -358,7 +358,7 @@ void COpenGLControl::OnMouseMove(UINT nFlags, CPoint point)
 	// Right Mouse Button
 	else if ( nFlags & MK_RBUTTON)
 	{
-		//camera.MouseMoveCamera(point);
+		//cam.MouseMoveCamera(point);
 		m_fPosX += (float)0.05f * diffX;
 		m_fPosY -= (float)0.05f * diffY;
 		TRACE("\nX position: %f \n", m_fPosX);
