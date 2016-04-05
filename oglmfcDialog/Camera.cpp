@@ -87,9 +87,12 @@ void CCamera::MouseZoomCamera(CPoint point)
 	//diffY = (int)(point.y - m_fLastY);
 	//m_fLastX  = (float)point.x; 
 	//m_fLastY  = (float)point.y;
-	m_fZoom += 0.1f;
 	
-	TRACE("Zoom MOUSE: %f \n", m_fZoom);
+	// RVP updated zoom calculation
+	//m_fZoom += 0.1f;
+	m_fZoom += (float)0.1f *(m_RightDownPos.y - point.y);
+	
+//	TRACE("Zoom MOUSE: %f \n", m_fZoom);
 }
 
 void CCamera::MouseMoveCamera(CPoint point)
@@ -111,26 +114,28 @@ void CCamera::MouseMoveCamera(CPoint point)
 	// this way when you start actually moving the mouse the default last position
 	// is actually something that exists in the screen space.
 
-	TRACE("point.x: %li \n", point.x);
-	TRACE("point.y: %li \n", point.y);
-	TRACE("mouse.m_fPosX: %f \n", m_fPosX);
-	TRACE("mouse.m_fPosY: %f \n", m_fPosY);
-	TRACE("Last X: %f \n", m_RightDownPos.x);
-	TRACE("Last Y: %f \n", m_RightDownPos.x);
+//	TRACE("point.x: %li \n", point.x);
+//	TRACE("point.y: %li \n", point.y);
+//	TRACE("mouse.m_fPosX: %f \n", m_fPosX);
+//	TRACE("mouse.m_fPosY: %f \n", m_fPosY);
+//	TRACE("Last X: %f \n", m_RightDownPos.x);
+//	TRACE("Last Y: %f \n", m_RightDownPos.x);
 	//NewPoint(point);
 	//TRACE("point.x: %li \n", point.x);
 	//TRACE("point.y: %li \n", point.y);
 	//m_fPosX += diffX * 0.01f;
 	//m_fPosY -= diffY * 0.01f;
 	
-	m_fPosX -= (float)(m_RightDownPos.x - point.x) * 0.005f;
-	m_fPosY += (float)(m_RightDownPos.y - point.y) * 0.005f;
-	TRACE("mouse.m_fPosX: %f \n", m_fPosX);
-	TRACE("mouse.m_fPosY: %f \n", m_fPosY);
+	// RVP updated x & y position calculation
+	m_fPosX -= (float)0.05f * (m_RightDownPos.x - point.x);
+	m_fPosY += (float)0.05f * (m_RightDownPos.y - point.y);
+//	TRACE("mouse.m_fPosX: %f \n", m_fPosX);
+//	TRACE("mouse.m_fPosY: %f \n", m_fPosY);
 	m_RightDownPos = point;
 }
 
 
+/*
 void CCamera::NewPoint(CPoint point)
 {
 	diffX = 0;
@@ -147,10 +152,12 @@ void CCamera::NewPoint(CPoint point)
 	TRACE("X last NewPoint: %f \n", m_fLastX);
 	TRACE("Y last NewPoint: %f \n", m_fLastY);
 }
+*/
+
 
 void CCamera::MouseRotateCamera(CPoint point)
 {
-	NewPoint(point);
+	//NewPoint(point);
 	//mouse_controls mouse;
 
 	//diffX = (int)(point.x - m_fLastX);
@@ -158,25 +165,29 @@ void CCamera::MouseRotateCamera(CPoint point)
 	//m_fLastX  = (float)point.x;
 	//m_fLastY  = (float)point.y;
 
-	m_fRotX += (float) 0.5f * diffY;
+	// RVP updated calculation for rotate
+	//m_fRotX += (float) 0.5f * diffY;
+	m_fRotX -= (float)0.5f * (m_RightDownPos.y - point.y);
 
 	if ((m_fRotX > 360.0f) || (m_fRotX < -360.0f))
 	{
 		m_fRotX = 0.0f;
 	}
 
-	m_fRotY += (float)0.5f * diffX;
+	//m_fRotY += (float)0.5f * diffX;
+	m_fRotY -= (float)0.5f * (m_RightDownPos.x - point.x);
 
-	if((m_fRotY > 360.0f)||(m_fRotY < -360.0f))
+	if((m_fRotY > 360.0f) || (m_fRotY < -360.0f))
 	{
 		m_fRotY = 0.0f;
 	}
 	
-	TRACE("\nX rotation: %f \n", m_fRotX);
-	TRACE("Y rotation: %f \n", m_fRotY);
-
+//	TRACE("\nX rotation: %f \n", m_fRotX);
+//	TRACE("Y rotation: %f \n", m_fRotY);
+	m_RightDownPos = point;
 	//return mouse;
 }
+
 
 BEGIN_MESSAGE_MAP(CCamera, CWnd)
 END_MESSAGE_MAP()

@@ -61,8 +61,7 @@ public:
 	//void CameraView(float zoom, float translateX, float translateY, float rotateX, float rotateY);
 	void CameraView();
 
-	float	m_fRotX;		// X Rotation in camera View
-	float	m_fRotY;		// Y Rotation in camera View
+
 
 	//float zoom;
 	//float translateX;
@@ -110,6 +109,8 @@ protected:
 	float	m_fPosX;		// X position of the model in camera View
 	float	m_fPosY;		// Y position of the model in camera View
 	float	m_fZoom;		// Zoom on model in camera View
+	float	m_fRotX;		// X Rotation in camera View
+	float	m_fRotY;		// Y Rotation in camera View
 
 	float	m_fLastX;		// last known mouse X position
 	float	m_fLastY;		// last known mouse Y position

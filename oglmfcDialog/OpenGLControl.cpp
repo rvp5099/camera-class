@@ -134,8 +134,8 @@ void COpenGLControl::OnDraw(CDC *pDC)
 	//cam.m_fZoom = m_fZoom;
 	//cam.m_fPosX = m_fPosX;
 	//cam.m_fPosY = m_fPosY;
-	cam.m_fRotX = m_fRotX;
-	cam.m_fRotY = m_fRotY;
+//	cam.m_fRotX = m_fRotX;
+//	cam.m_fRotY = m_fRotY;
 	cam.CameraView();
 	//camera.RotateCamera(45.0f);
 	//
@@ -314,16 +314,16 @@ void COpenGLControl::OnMouseMove(UINT nFlags, CPoint point)
 	// Left Mouse Button
 	if (nFlags & MK_LBUTTON)
 	{
-<<<<<<< HEAD
+
 		//cam.mouse;
-=======
+
 		//camera.mouse;
 
 		// CLK III -- because all of this should be contained you should only need to send point to the camera
 		// move routine, this ensures that the only place you are manipulating the camera data is inside the class
 		// and then you can't ruin your data by allowing the program to interfere
 
->>>>>>> 96ca3fda34f8419c3de7204e387f776c26e8549e
+
 		cam.MouseMoveCamera(point);
 		//m_fPosX = cam.m_fPosX;
 		//m_fPosY = cam.m_fPosY;
@@ -346,8 +346,8 @@ void COpenGLControl::OnMouseMove(UINT nFlags, CPoint point)
 	// Middle Mouse Button
 	else if ( nFlags & MK_MBUTTON)
 	{
-		//cam.MouseRotateCamera(point);
-		
+		cam.MouseRotateCamera(point);
+/*		
 		m_fRotX += (float) 0.5f * diffY;
 
 		if ((m_fRotX > 360.0f) || (m_fRotX < -360.0f))
@@ -364,25 +364,25 @@ void COpenGLControl::OnMouseMove(UINT nFlags, CPoint point)
 
 		TRACE("\nX rotation: %f \n", m_fRotX);
 		TRACE("Y rotation: %f \n", m_fRotY);
-		
+*/		
 	}
 	// Right Mouse Button
-	else if ( nFlags & MK_RBUTTON)
-	{
-<<<<<<< HEAD
+//	else if ( nFlags & MK_RBUTTON)
+//	{
+
 		//cam.MouseMoveCamera(point);
-		m_fPosX += (float)0.05f * diffX;
-		m_fPosY -= (float)0.05f * diffY;
-		TRACE("\nX position: %f \n", m_fPosX);
-		TRACE("Y position: %f \n", m_fPosY);
-=======
+//		m_fPosX += (float)0.05f * diffX;
+//		m_fPosY -= (float)0.05f * diffY;
+//		TRACE("\nX position: %f \n", m_fPosX);
+//		TRACE("Y position: %f \n", m_fPosY);
+
 		//camera.MouseMoveCamera(point);
 		//m_fPosX += (float)0.05f * diffX;
 		//m_fPosY -= (float)0.05f * diffY;
 		//TRACE("\nX position: %f \n", m_fPosX);
 		//TRACE("Y position: %f \n", m_fPosY);
->>>>>>> 96ca3fda34f8419c3de7204e387f776c26e8549e
-	}
+
+//	}
 	else if (nFlags & MK_CONTROL)
 	{
 	//	TRACE("x point: %f\n", point.x);
@@ -415,6 +415,7 @@ void COpenGLControl::OnMouseMove(UINT nFlags, CPoint point)
 	// so that when you start the camera move there isn't that sudden lurch
 
 	cam.m_RightDownPos = point;
+	
 	OnDraw(NULL);
 
 	CWnd::OnMouseMove(nFlags, point);
