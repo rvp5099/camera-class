@@ -47,22 +47,23 @@ public:
 	virtual ~CCamera();
 
 	void IdentityMatrix();
-	void CameraView()
+	void CameraView();
 
 	//mouse_controls mouse;	
 	void MouseZoomCamera(CPoint point);
 	void MouseMoveCamera(CPoint point);
 	void MouseRotateCamera(CPoint point);
-	CPoint		m_StartPos;
 
-	void setMatrix();
-
+	void setMatrix();				// builds a new matrix
+	void SetPoint( CPoint point);	// sets current mouse position
 	void setPerspective(float fovy, float aspect, float zNear, float zFar);
-	void display();
 
-
+	void display();				// displays built view matrix
+	void displayProjection();   // displays built projection matrix
 
 protected:
+	
+	CPoint		m_MovePos;
 
 	float	m_fPosX;		// X Translation in camera View
 	float	m_fPosY;		// Y Translation in camera View
@@ -71,21 +72,9 @@ protected:
 	float	m_fRotX;		// X Rotation in camera View
 	float	m_fRotY;		// Y Rotation in camera View
 	float   m_fRotZ;		// Z Rotation in camera view
-	
-	float	m_fScaleX;		// X Scale in camera View
-	float	m_fScaleY;		// Y Scale in camera View
-	float   m_fScaleZ;		// Z Scale in camera view
 
 	const float		*m_pProjMatrx;
 	const float		*m_pViewMatrix;
-
-
-	float	m_fLastX;		// last known mouse X position
-	float	m_fLastY;		// last known mouse Y position
-	int diffX;
-	int diffY;
-	void NewPoint(CPoint point);
-
 	glm::mat4		m_ProjMatrix;
 	glm::mat4		m_ViewMatrix;
 

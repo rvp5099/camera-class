@@ -95,23 +95,7 @@ void COpenGLControl::oglInitialize(void)
 	//Turn on depth testing
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
-
-	// Send draw request
-	OnDraw(NULL);
-}
-
-void COpenGLControl::OnPaint()
-{
-	//CPaintDC dc(this);	//device context for painting
-	ValidateRect(NULL);
-}
-
-void COpenGLControl::OnDraw(CDC *pDC)
-{
-	//CCamera camera;
-	glLoadIdentity();
-	//cam.IdentityMatrix();
-
+	
 	float ambient[]  = {0.2f, 0.2f, 0.2f, 1.0f};
 	float diffuse[]  = {1.0f, 1.0f, 1.0f, 1.0f};
 	float specular[] = {0.803f, 0.952f, 0.995f, 1.0f};
@@ -126,25 +110,23 @@ void COpenGLControl::OnDraw(CDC *pDC)
 
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-	
-	glLoadIdentity();
 
-	//camera control
-	//cam_controls cam;
-	//cam.m_fZoom = m_fZoom;
-	//cam.m_fPosX = m_fPosX;
-	//cam.m_fPosY = m_fPosY;
-	cam.m_fRotX = m_fRotX;
-	cam.m_fRotY = m_fRotY;
-	cam.CameraView();
-	//camera.RotateCamera(45.0f);
-	//
-	//glLoadIdentity();
-	//glTranslatef(0.0f, 0.0f, -m_fZoom);
-	//glTranslatef(m_fPosX, m_fPosY, 0.0f);
-	//glRotatef(m_fRotX, 1.0f, 0.0f, 0.0f);
-	//glRotatef(m_fRotY, 0.0f, 1.0f, 0.0f);
-	/////////////////
+	// Send draw request
+	OnDraw(NULL);
+}
+
+void COpenGLControl::OnPaint()
+{
+	//CPaintDC dc(this);	//device context for painting
+	ValidateRect(NULL);
+}
+
+void COpenGLControl::OnDraw(CDC *pDC)
+{
+	//CCamera camera;
+
+	
+	cam.IdentityMatrix();
 }
 
 void COpenGLControl::OnTimer(UINT_PTR nIDEvent)
@@ -182,17 +164,12 @@ void COpenGLControl::OnSize(UINT nType, int cx, int cy)
 	glViewport(0, 0, cx, cy);
 
 	//Projection view
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
 	cam.setPerspective(35.0f, (float)cx / (float)cy, 0.01f, 2000.0f);
 
-	//gluPerspective(35.0f, (float)cx / (float)cy, 0.01f, 2000.0f);
-	glMultMatrixf(cam.m_pProjMatrx);
+	cam.displayProjection();
 
 	// Model view
-	glMatrixMode(GL_MODELVIEW);
-
+	cam.setMatrix();
 }
 
 void COpenGLControl::oglDrawScene(void)
@@ -266,13 +243,6 @@ void COpenGLControl::oglDrawScene(void)
 
 void COpenGLControl::OnMouseMove(UINT nFlags, CPoint point)
 {
-	float turnRate = 0.001f;
-
-	int diffX = (int)(point.x - m_fLastX);
-	int diffY = (int)(point.y - m_fLastY);
-	m_fLastX  = (float)point.x;
-	m_fLastY  = (float)point.y;
-	
 	// Left Mouse Button
 	if (nFlags & MK_LBUTTON)
 	{
@@ -281,41 +251,15 @@ void COpenGLControl::OnMouseMove(UINT nFlags, CPoint point)
 	// Middle Mouse Button
 	else if ( nFlags & MK_MBUTTON)
 	{
-		cam.MouseRotateCamera(point);
-		
-		m_fRotX += (float) 0.5f * diffY;
-
-		if ((m_fRotX > 360.0f) || (m_fRotX < -360.0f))
-		{
-			m_fRotX = 0.0f;
-		}
-
-		m_fRotY += (float)0.5f * diffX;
-
-		if((m_fRotY > 360.0f)||(m_fRotY < -360.0f))
-		{
-			m_fRotY = 0.0f;
-		}
-
-		TRACE("\nX rotation: %f \n", m_fRotX);
-		TRACE("Y rotation: %f \n", m_fRotY);
-		
+		cam.MouseZoomCamera(point);
 	}
 	// Right Mouse Button
 	else if ( nFlags & MK_RBUTTON)
 	{
-		//camera.MouseMoveCamera(point);
-		//m_fPosX += (float)0.05f * diffX;
-		//m_fPosY -= (float)0.05f * diffY;
-		//TRACE("\nX position: %f \n", m_fPosX);
-		//TRACE("Y position: %f \n", m_fPosY);
-	}
-	else if (nFlags & MK_CONTROL)
-	{
-		cam.MouseZoomCamera(point);
+		cam.MouseRotateCamera(point);
 	}
 
-	cam.m_RightDownPos = point;
+	//cam.SetPoint( point );
 	OnDraw(NULL);
 
 	CWnd::OnMouseMove(nFlags, point);
