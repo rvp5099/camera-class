@@ -7,6 +7,9 @@
 #include <gl\GL.h>
 #include <gl\GLU.h>
 
+#include "include/glm/gtc/type_ptr.hpp"
+#include "include/glm/gtc/matrix_transform.hpp"
+
 // CCamera
 
 IMPLEMENT_DYNAMIC(CCamera, CWnd)
@@ -22,17 +25,28 @@ CCamera::CCamera(float thewindowWidth, float thewindowHeight)
 */
 CCamera::CCamera()
 {
-	m_fPosX  = 0.0f;
-	m_fPosY  = 0.0f;
-	m_fZoom  = 0.0f;
-	m_fRotX  = 0.0f;
-	m_fRotY  = 0.0f;
+	m_fPosX = 0.0f;		// X Translation in camera View
+	m_fPosY = 0.0f;		// Y Translation in camera View
+	m_fPosZ = 0.0f;		// Z Translation in camera view
+	
+	m_fRotX = 0.0f;		// X Rotation in camera View
+	m_fRotY = 0.0f;		// Y Rotation in camera View
+	m_fRotZ = 0.0f;		// Z Rotation in camera view
+	
+	m_fScaleX = 1.0f;		// X Scale in camera View
+	m_fScaleY = 1.0f;		// Y Scale in camera View
+	m_fScaleZ = 1.0f;		// Z Scale in camera view
+
 	diffX    = 0;
 	diffY    = 0;
 	m_fLastX = 0.0f;
 	m_fLastY = 0.0f;
-	m_RightDownPos.x = 0;
-	m_RightDownPos.y = 0;
+
+	m_StartPos.x = 0;
+	m_StartPos.y = 0;
+
+	m_pProjMatrx = (const float*)glm::value_ptr(m_ProjMatrix);
+	m_pViewMatrix = (const float*)glm::value_ptr(m_ViewMatrix);
 }
 
 CCamera::~CCamera()
@@ -44,29 +58,31 @@ CCamera::~CCamera()
 //
 //}
 
-void CCamera::RotateCamera(float angle)
-{
-	glRotatef(angle, 0.0f, 0.0f, 1.0f);
-}
-
-void CCamera::MoveCamera(vector_t move)
-{
-	glTranslatef(move.x, move.y, 0.0f);
-}
 
 void CCamera::IdentityMatrix()
 {
 	glLoadIdentity();
+	m_ViewMatrix = glm::mat4();
 }
 
-//void CCamera::MoveCamera(float distance)
-//{
-//
-//}
-
-void CCamera::ZoomCamera(float zoom)
+void CCamera::display()
 {
-	glTranslatef(0.0f, 0.0f, -zoom);
+	glMultMatrixf(m_pViewMatrix);
+}
+
+void CCamera::setPerspective(float fovy, float aspect, float zNear, float zFar)
+{
+	m_ProjMatrix = glm::perspective(fovy, aspect, zNear, zFar);
+}
+
+void CCamera::setMatrix()
+{
+	m_ViewMatrix = glm::scale(glm::mat4(), glm::vec3( m_fScaleX, m_fScaleY, m_fScaleZ));
+	m_ViewMatrix = glm::translate(m_ViewMatrix, glm::vec3(m_fPosX, m_fPosY, m_fPosY));
+	// construct the rotation positioning matrix
+	m_ViewMatrix = glm::rotate(m_ViewMatrix, glm::radians( m_fRotX ), glm::vec3(1.0f, 0.0f, 0.0f));
+	m_ViewMatrix = glm::rotate(m_ViewMatrix, glm::radians( m_fRotY ), glm::vec3(0.0f, 1.0f, 0.0f));
+	m_ViewMatrix = glm::rotate(m_ViewMatrix, glm::radians( m_fRotZ ), glm::vec3(0.0f, 0.0f, 1.0f));	
 }
 
 void CCamera::CameraView()

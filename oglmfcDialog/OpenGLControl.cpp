@@ -185,53 +185,14 @@ void COpenGLControl::OnSize(UINT nType, int cx, int cy)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	gluPerspective(35.0f, (float)cx / (float)cy, 0.01f, 2000.0f);
+	cam.setPerspective(35.0f, (float)cx / (float)cy, 0.01f, 2000.0f);
+
+	//gluPerspective(35.0f, (float)cx / (float)cy, 0.01f, 2000.0f);
+	glMultMatrixf(cam.m_pProjMatrx);
 
 	// Model view
 	glMatrixMode(GL_MODELVIEW);
 
-	/*
-	switch (nType)
-	{
-	// If window resize token is "maximize"
-	case SIZE_MAXIMIZED:
-	{
-	// Get the current window rect
-	GetWindowRect(m_rect);
-
-	// Move the window accordingly
-	MoveWindow( 6, 6, cx - 14, cy - 14);
-
-	// Get the new window rect
-	GetWindowRect(m_rect);
-	m_oldWindow = m_rect;
-
-	break;
-	}
-
-	// if window resize token is "restore"
-	case SIZE_RESTORED:
-	{
-	// If the window is currently maximized
-	if (m_bIsMaximized)
-	{
-	// Get the current window rect
-	GetWindowRect(m_rect);
-
-	// Move the window accordingly (to our stored old window)
-	MoveWindow(m_oldWindow.left,
-	m_oldWindow.top - 18,
-	m_originalRect.Width() - 4,
-	m_originalRect.Height() - 4);//
-
-	// Get the new window rect and store it as the old widow
-	GetWindowRect(m_oldWindow);
-
-	}
-
-	break;
-	}
-	}//*/
 }
 
 void COpenGLControl::oglDrawScene(void)
@@ -239,6 +200,12 @@ void COpenGLControl::oglDrawScene(void)
 	// Wireframe Mode
 	glPolygonMode(GL_FRONT, GL_LINE);
 	glPolygonMode(GL_FRONT, GL_FILL);
+
+	// CLK III - I would call a routine to position the camera in the draw loop instead of relying on 
+	// setting the matrix in the mouse controls
+
+	glPushMatrix();
+	cam.display();
 
 	glBegin(GL_QUADS);
 	glColor4ub( 000, 155, 255, 255);
@@ -293,56 +260,28 @@ void COpenGLControl::oglDrawScene(void)
 	glVertex3f(  objectLength, -1.0f, -1.0f);
 	glVertex3f(  objectLength,  1.0f, -1.0f);
 	glEnd();
+
+	glPopMatrix();
 }
 
 void COpenGLControl::OnMouseMove(UINT nFlags, CPoint point)
 {
 	float turnRate = 0.001f;
 
-//	TRACE("\nX OGLControl: %li\n", point.x);
-//	TRACE("Y OGLControl: %li\n", point.y);
-	//camera.NewPoint(point);
 	int diffX = (int)(point.x - m_fLastX);
 	int diffY = (int)(point.y - m_fLastY);
-//	TRACE("X diff OGLControl: %i \n", diffX);
-//	TRACE("Y diff OGLControl: %i \n", diffY);
 	m_fLastX  = (float)point.x;
 	m_fLastY  = (float)point.y;
-//	TRACE("X last OGLControl: %f \n", m_fLastX);
-//	TRACE("Y last OGLControl: %f \n", m_fLastY);
 	
 	// Left Mouse Button
 	if (nFlags & MK_LBUTTON)
 	{
-		//camera.mouse;
-
-		// CLK III -- because all of this should be contained you should only need to send point to the camera
-		// move routine, this ensures that the only place you are manipulating the camera data is inside the class
-		// and then you can't ruin your data by allowing the program to interfere
-
-		cam.MouseMoveCamera(point);
-		//m_fPosX = cam.m_fPosX;
-		//m_fPosY = cam.m_fPosY;
-
-
-		//m_fPosX = camera.m_fPosX;
-		//m_fPosY = camera.m_fPosY;
-		
-//		TRACE("X position OGLControl before: %f \n", m_fPosX);
-//		TRACE("Y position OGLControl before: %f \n", m_fPosY);
-//		m_fPosX += (float)0.05f * diffX;
-//		m_fPosY -= (float)0.05f * diffY;
-//		TRACE("X position OGLControl after: %f \n", m_fPosX);
-//		TRACE("Y position OGLControl after: %f \n", m_fPosY);
-		
-		//TRACE("X position camera.m_fPosX: %f \n", camera.m_fPosX);
-		//TRACE("Y position camera.m_fPosY: %f \n", camera.m_fPosY);
-		
+		cam.MouseMoveCamera(point);	
 	}
 	// Middle Mouse Button
 	else if ( nFlags & MK_MBUTTON)
 	{
-		//camera.MouseRotateCamera(point);
+		cam.MouseRotateCamera(point);
 		
 		m_fRotX += (float) 0.5f * diffY;
 
@@ -373,34 +312,8 @@ void COpenGLControl::OnMouseMove(UINT nFlags, CPoint point)
 	}
 	else if (nFlags & MK_CONTROL)
 	{
-	//	TRACE("x point: %f\n", point.x);
-	//	TRACE("y point: %f\n", point.y);
 		cam.MouseZoomCamera(point);
-		//m_fZoom -= (float) 0.1f * diffY;
-		//m_fZoom = camera.mouse.m_fZoom;
-	//	TRACE("Y diff CAMERA: %d \n", diffY);
-	//	TRACE("Y diff CAMERA: %d \n", camera.diffY);
-	//	TRACE("Zoom OGLControl: %f \n", m_fZoom);
-	//	TRACE("Zoom CAMERA: %f \n", camera.m_fZoom);
 	}
-	/*
-	else if (WM_MOUSEWHEEL)
-	{
-		if ((short)HIWORD(wParam) < 0)
-        {
-            m_fZoom -= (float) 0.1f * diffY;
-        }
-        else
-        {
-            m_fZoom += (float) 0.1f * diffY;
-        }
-	}
-	*/
-
-	// CLK III -- this is what the camera wants.
-
-	// you have to set this all the time that the mouse is moving
-	// so that when you start the camera move there isn't that sudden lurch
 
 	cam.m_RightDownPos = point;
 	OnDraw(NULL);
