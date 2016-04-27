@@ -99,7 +99,7 @@ void COpenGLControl::oglInitialize(void)
 	float ambient[]  = {0.2f, 0.2f, 0.2f, 1.0f};
 	float diffuse[]  = {1.0f, 1.0f, 1.0f, 1.0f};
 	float specular[] = {0.803f, 0.952f, 0.995f, 1.0f};
-	float position[] = {20.0f, 20.0f, 10.0f, 1.0f};
+	float position[] = {20.0f, -20.0f, 10.0f, 1.0f};
 
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
 
@@ -123,10 +123,6 @@ void COpenGLControl::OnPaint()
 
 void COpenGLControl::OnDraw(CDC *pDC)
 {
-	//CCamera camera;
-
-	
-	cam.IdentityMatrix();
 }
 
 void COpenGLControl::OnTimer(UINT_PTR nIDEvent)
@@ -163,8 +159,13 @@ void COpenGLControl::OnSize(UINT nType, int cx, int cy)
 	// Map the OpenGL coordinates.
 	glViewport(0, 0, cx, cy);
 
+
+	float lens = 75.0f;
+	float aspect = (float)cx / (float)cy;
+
+
 	//Projection view
-	cam.setPerspective(35.0f, (float)cx / (float)cy, 0.01f, 2000.0f);
+	cam.setPerspective( lens, aspect, 0.1f, 1000.0f);
 
 	cam.displayProjection();
 
@@ -259,7 +260,7 @@ void COpenGLControl::OnMouseMove(UINT nFlags, CPoint point)
 		cam.MouseRotateCamera(point);
 	}
 
-	//cam.SetPoint( point );
+	cam.SetPoint( point );
 	OnDraw(NULL);
 
 	CWnd::OnMouseMove(nFlags, point);

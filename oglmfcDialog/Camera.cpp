@@ -18,7 +18,7 @@ CCamera::CCamera()
 {
 	m_fPosX = 0.0f;		// X Translation in camera View
 	m_fPosY = 0.0f;		// Y Translation in camera View
-	m_fPosZ = -10.0f;		// Z Translation in camera view
+	m_fPosZ = -5.0f;		// Z Translation in camera view
 	
 	m_fRotX = 0.0f;		// X Rotation in camera View
 	m_fRotY = 0.0f;		// Y Rotation in camera View
@@ -71,9 +71,10 @@ void CCamera::setMatrix()
 
 void CCamera::MouseZoomCamera(CPoint point)
 {
-	m_fPosZ -= 0.5;
+	m_fPosZ -= (float)(point.y - m_MovePos.y) * 0.05;
 
 	TRACE("Zoom MOUSE: %f \n", m_fPosZ);
+	m_MovePos = point;
 	setMatrix();
 }
 
@@ -87,8 +88,8 @@ void CCamera::MouseMoveCamera(CPoint point)
 	TRACE("Last X: %f \n", m_MovePos.x);
 	TRACE("Last Y: %f \n", m_MovePos.y);
 	
-	m_fPosX -= (float)(point.x - m_MovePos.x) * 0.005f;
-	m_fPosY += (float)(point.y - m_MovePos.y) * 0.005f;
+	m_fPosX -= (float)(point.x - m_MovePos.x) * 0.01f;
+	m_fPosY += (float)(point.y - m_MovePos.y) * 0.01f;
 	TRACE("mouse.m_fPosX: %f \n", m_fPosX);
 	TRACE("mouse.m_fPosY: %f \n", m_fPosY);
 	m_MovePos = point;
