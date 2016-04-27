@@ -1,6 +1,13 @@
 #pragma once
 #include <vector>
-using namespace std;
+#include "include\glm\glm.hpp"
+
+// CLK III you should never put using namespace std
+// in an include file. it can bloat the entire standard library
+// into your program regardless of if you are using it or not
+// you should always namespace std::(function) when you can
+
+// it helps to keep compile time short and file size small.
 
 // CCamera
 //struct xyz{
@@ -39,84 +46,37 @@ public:
 	CCamera();
 	virtual ~CCamera();
 
-	//WPARAM wParam; 
-
-	//void SetCamera(vector<float> cPosition, float horizontal, float vertical);
-	//Setting the Camera consists of giving its position and angles that it is rotated in the x-z plane and in the y direction (horizontal and vertical).
-
-	void RotateCamera(float angle);
-	//Rotating the Camera is possible in both the horizontal and vertical directions, and the function takes these as parameters.
-
-	//void SlideCamera(float slideX, float slideY, float slideZ);
-	void MoveCamera(vector_t move);
-	//SlideCamera can occur in both directions as well.
-
-	//void MoveCamera(float distance);
-	//Since moving the Camera occurs with all of the current angles and the distance in each direction can be calculated all we need is a distance forward or back at the current angle.
-
-	void ZoomCamera(float zoom);
-
 	void IdentityMatrix();
-
-	//void CameraView(float zoom, float translateX, float translateY, float rotateX, float rotateY);
 	void CameraView();
 
-	float	m_fRotX;		// X Rotation in camera View
-	float	m_fRotY;		// Y Rotation in camera View
-
-	//float zoom;
-	//float translateX;
-	//float translateY;
-	//float rotateX;
-	//float rotateY;
-
-	//void MouseMove(UINT nFlags, CPoint point, float zoom, float translateX, float translateY, float LastX, float LastY,  int diffX, int diffY, WPARAM wParam);
-
+	//mouse_controls mouse;	
 	void MouseZoomCamera(CPoint point);
-	//mouse_controls mouse;
-
 	void MouseMoveCamera(CPoint point);
 	void MouseRotateCamera(CPoint point);
 
-	//vector<float> cameraPosition;
-	//vector<float> cameraTarget;
-	//vector<float> cameraUpVector;
+	void setMatrix();				// builds a new matrix
+	void SetPoint( CPoint point);	// sets current mouse position
+	void setPerspective(float fovy, float aspect, float zNear, float zFar);
 
-	//float radius;
-	//float moveDist;
+	void display();				// displays built view matrix
+	void displayProjection();   // displays built projection matrix
 
-	//void cameraInit();
-	//void set(float posX, float posY, float posZ,
-	//	float lookX, float lookY, float lookZ,
-	//	float upX, float upY, float upZ);
- 
-    //xyz getPos();
-    //xyz getLook();
-    //xyz getUp();
-	
-	//xyz pos;
-    //xyz look;
-	//xyz up;
-	
-	/* depth of field */
-	//float focaldistance;
-	//float aperturesize;
-	//UINT blades;
-	//float bladesrotation;
-	CPoint		m_RightDownPos;
 protected:
 	
+	CPoint		m_MovePos;
 
-	float	m_fPosX;		// X position of the model in camera View
-	float	m_fPosY;		// Y position of the model in camera View
-	float	m_fZoom;		// Zoom on model in camera View
+	float	m_fPosX;		// X Translation in camera View
+	float	m_fPosY;		// Y Translation in camera View
+	float   m_fPosZ;		// Z Translation in camera view
+	
+	float	m_fRotX;		// X Rotation in camera View
+	float	m_fRotY;		// Y Rotation in camera View
+	float   m_fRotZ;		// Z Rotation in camera view
 
-	float	m_fLastX;		// last known mouse X position
-	float	m_fLastY;		// last known mouse Y position
-	int diffX;
-	int diffY;
-	void NewPoint(CPoint point);
-
+	const float		*m_pProjMatrx;
+	const float		*m_pViewMatrix;
+	glm::mat4		m_ProjMatrix;
+	glm::mat4		m_ViewMatrix;
 
 	DECLARE_MESSAGE_MAP()
 };
